@@ -12,7 +12,7 @@ public class VerificationController(IVerificationService verificationService) : 
 
     [HttpPost("send")]
     public async Task<IActionResult> Send(SendVerificationCodeRequest request)
-    {
+    {   
         if (!ModelState.IsValid)
             return BadRequest(new { Error = "Recipient email address is required." });
 

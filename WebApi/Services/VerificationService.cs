@@ -14,15 +14,16 @@ public class VerificationService(IConfiguration configuration, EmailClient email
     private readonly IMemoryCache _cache = cache;
     private static readonly Random _random = new();
 
-    public async Task<VerificationServiceResult> SendVerificationCodeAsync(SendVerificationCodeRequest request)
+    public async Task<ResponseResult> SendVerificationCodeAsync(SendVerificationCodeRequest request)
     {
         try
         {
             if (request == null || string.IsNullOrWhiteSpace(request.Email))
-                return new VerificationServiceResult { Succeeded = false, Error = "Recipient email address is required." };
+                return new ResponseResult { Succeeded = false, Error = "Recipient email address is required." };
 
             var verificationCode = _random.Next(100000, 999999).ToString();
             var subject = $"Your code is {verificationCode}";
+
             var plainTextContent = @$"
                 Verify Your Email Address
 
@@ -32,17 +33,16 @@ public class VerificationService(IConfiguration configuration, EmailClient email
 
                 {verificationCode}
 
-                Alternatively, you can open the verification page using the following link:
-                https://domain.com/verify?email={request.Email}&token=
 
                 If you did not initiate this request, you can safely disregard this email.
                 We take your privacy seriously. No further action is required if you did not initiate this request.
 
                 Privacy Policy:
-                https://domain.com/privacy-policy
+                https://lively-hill-0b76ba003.6.azurestaticapps.net/privacy-policy
 
-                © domain.com. All rights reserved.
+                © 2025 Ventixe. All rights reserved.
                 ";
+
             var htmlContent = @$"
                 <!DOCTYPE html>
                 <html lang=""en"">
@@ -57,25 +57,20 @@ public class VerificationService(IConfiguration configuration, EmailClient email
                         </h1>
                         <p style=""font-size:16px; color:#1E1E20; margin-bottom:16px;"">Hello,</p>
                         <p style=""font-size:16px; color:#1E1E20; margin-bottom:24px;"">
-                            To complete your verification, please enter the code below or click the button to open a new page.
+                            To complete your verification, please enter the code below.
                         </p>
                         <div style=""display:flex; justify-content:center; align-items:center; padding:16px; background-color:#FCD3FE; color:#1C2346; font-size:24px; border-radius:8px; margin-bottom:32px;"">
                             {verificationCode}
-                        </div>
-                        <div style=""text-align:center; margin-bottom:32px;"">
-                            <a href=""https://domain.com/verify?email={request.Email}&token="" style=""background-color:#F26CF9; color:#FFFFFF; padding:12px 24px; border-radius:8px; text-decoration:none;"">
-                                Open Verification Page
-                            </a>
                         </div>
                         <p style=""font-size:12px; color:#777779; text-align:center; margin-top:24px;"">
                             If you did not initiate this request, you can safely disregard this email.
                             <br><br>
                             We take your privacy seriously. No further action is required if you did not initiate this request.
                             For more information about how we process personal data, please see our
-                            <a href=""https://domain.com/privacy-policy"" style=""color:#F26CF9; text-decoration:none;"">Privacy Policy</a>.
+                            <a href=""https://lively-hill-0b76ba003.6.azurestaticapps.net/privacy-policy"" style=""color:#F26CF9; text-decoration:none;"">Privacy Policy</a>.
                         </p>
                         <div style=""font-size:12px; color:#777779; text-align:center; margin-top:24px;"">
-                            © domain.com. All rights reserved.
+                            © 2025 Ventixe. All rights reserved.
                         </div>
                     </div>
                 </body>
@@ -94,12 +89,12 @@ public class VerificationService(IConfiguration configuration, EmailClient email
             var emailSendOperation = await _emailClient.SendAsync(WaitUntil.Started, emailMessage);
             SaveVerificationCode(new SaveVerificationCodeRequest { Email = request.Email, Code = verificationCode, ValidFor = TimeSpan.FromMinutes(10) });
 
-            return new VerificationServiceResult { Succeeded = true, Message = "Verification email sent successfully." };
+            return new ResponseResult { Succeeded = true, Message = "Verification email sent successfully." };
         }
         catch (Exception ex)
         {
             Debug.WriteLine(ex);
-            return new VerificationServiceResult { Succeeded = false, Error = "Failed to send verification email." };
+            return new ResponseResult { Succeeded = false, Error = "Failed to send verification email." };
         }
 
     }
@@ -110,7 +105,7 @@ public class VerificationService(IConfiguration configuration, EmailClient email
         _cache.Set(request.Email.ToLowerInvariant(), request.Code, request.ValidFor);
     }
 
-    public VerificationServiceResult VerifyVerificationCode(VerifyVerificationCodeRequest request)
+    public ResponseResult VerifyVerificationCode(VerifyVerificationCodeRequest request)
     {
         var key = request.Email.ToLowerInvariant();
 
@@ -119,10 +114,10 @@ public class VerificationService(IConfiguration configuration, EmailClient email
             if (storedCode == request.Code)
             {
                 _cache.Remove(key);
-                return new VerificationServiceResult { Succeeded = true, Message = "Verification successful." };
+                return new ResponseResult { Succeeded = true, Message = "Verification successful." };
             }
         }
 
-        return new VerificationServiceResult { Succeeded = false, Error = "Invalid or expired verification code." };
+        return new ResponseResult { Succeeded = false, Error = "Invalid or expired verification code." };
     }
 }

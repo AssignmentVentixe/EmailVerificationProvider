@@ -1,6 +1,6 @@
 ﻿namespace WebApi.Models;
 
-public class VerificationServiceResult
+public class ResponseResult
 {
     public bool Succeeded { get; set; }
     public string? Message { get; set; }
