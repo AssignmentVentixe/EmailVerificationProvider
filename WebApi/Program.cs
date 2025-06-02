@@ -15,10 +15,15 @@ builder.Services.AddScoped<IBookingEmailService, BookingEmailService>();
 
 builder.Services.AddCors(o =>
     o.AddPolicy("CorsPolicy", p =>
-        p.WithOrigins("https://lively-hill-0b76ba003.6.azurestaticapps.net")
-         .AllowAnyHeader()
-         .AllowAnyMethod()
-         .AllowCredentials()));
+        p.WithOrigins(
+            "https://auth-api-ventixe-b9dyccgkh4egdtd8.swedencentral-01.azurewebsites.net",
+            "https://booking-api-ventixe-e5hydeevg6htf7br.swedencentral-01.azurewebsites.net"
+        )
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials()
+    )
+);
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
