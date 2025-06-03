@@ -50,14 +50,13 @@ public class BookingEmailService(IConfiguration configuration, EmailClient email
                             <h1 style=""margin:0; font-size:24px;"">Booking Confirmation</h1>
                         </div>
                         <div style=""padding:20px; color:#333333;"">
-                            <p>Hello,</p>
-                            <p>Thank you for your booking! Here are your booking details:</p>
+                            <p><strong>Thank you for your booking!</strong> Here are your booking details:</p>
                             <ul>
-                                <li><strong>Event:</strong> {request.EventName}</li>
-                                <li><strong>Event Location:</strong>{request.EventLocation}</li>
-                                <li><strong>Event Date:</strong>Event Date:{request.EventDate}</li>
+                                <li><strong>Event: </strong>{request.EventName}</li>
+                                <li><strong>Event Location: </strong>{request.EventLocation}</li>
+                                <li><strong>Event Date: </strong>{request.EventDate}</li>
                                 <br>
-                                <li><strong>Date of booking: {request.BookedDate:dd MMMM, yyyy, HH mm}</li>
+                                <li><strong>Date of booking: </strong>{request.BookedDate:dd MMMM, yyyy, HH:mm}</li>
                             </ul>
                             <p>We look forward to seeing you there.</p>
                             <p>Best regards,<br>Ventixe</p>
