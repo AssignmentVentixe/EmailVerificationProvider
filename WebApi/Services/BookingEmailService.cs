@@ -20,7 +20,13 @@ public class BookingEmailService(IConfiguration configuration, EmailClient email
             var plainTextContent = $@"
                     Hello,
 
-                    Thank you for your booking!
+                    Thank you for your booking. Here are your booking details:
+
+                    Event: {request.EventName}
+                    Event Location: {request.EventLocation}
+                    Event Date:{request.EventDate:dd MMMM, yyyy, HH mm}
+
+                    Date of booking: {request.BookedDate:dd MMMM, yyyy, HH mm}
 
 
                     We look forward to seeing you there.
@@ -47,9 +53,11 @@ public class BookingEmailService(IConfiguration configuration, EmailClient email
                             <p>Hello,</p>
                             <p>Thank you for your booking! Here are your booking details:</p>
                             <ul>
-                          
-                                <li><strong>Event:</strong> {request.EventId}</li>
-
+                                <li><strong>Event:</strong> {request.EventName}</li>
+                                <li><strong>Event Location:</strong>{request.EventLocation}</li>
+                                <li><strong>Event Date:</strong>Event Date:{request.EventDate:dd MMMM, yyyy, HH mm}</li>
+                                <br>
+                                <li><strong>Date of booking: {request.BookedDate:dd MMMM, yyyy, HH mm}</li>
                             </ul>
                             <p>We look forward to seeing you there.</p>
                             <p>Best regards,<br>Ventixe</p>
@@ -65,7 +73,7 @@ public class BookingEmailService(IConfiguration configuration, EmailClient email
 
             var emailMessage = new EmailMessage(
                 senderAddress: senderAddress,
-                recipients: new EmailRecipients([new EmailAddress(request.Email)]),
+                recipients: new EmailRecipients([new EmailAddress(request.BookingEmail)]),
                 content: new EmailContent(subject)
                 {
                     PlainText = plainTextContent,
