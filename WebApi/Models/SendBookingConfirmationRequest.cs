@@ -21,5 +21,5 @@ public class SendBookingConfirmationRequest
     public DateTime BookedDate { get; set; }
 
     [Required]
-    public DateTime EventDate { get; set; }
+    public string EventDate { get; set; } = null!;
 }

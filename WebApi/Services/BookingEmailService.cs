@@ -24,7 +24,7 @@ public class BookingEmailService(IConfiguration configuration, EmailClient email
 
                     Event: {request.EventName}
                     Event Location: {request.EventLocation}
-                    Event Date:{request.EventDate:dd MMMM, yyyy, HH mm}
+                    Event Date:{request.EventDate}
 
                     Date of booking: {request.BookedDate:dd MMMM, yyyy, HH mm}
 
@@ -55,7 +55,7 @@ public class BookingEmailService(IConfiguration configuration, EmailClient email
                             <ul>
                                 <li><strong>Event:</strong> {request.EventName}</li>
                                 <li><strong>Event Location:</strong>{request.EventLocation}</li>
-                                <li><strong>Event Date:</strong>Event Date:{request.EventDate:dd MMMM, yyyy, HH mm}</li>
+                                <li><strong>Event Date:</strong>Event Date:{request.EventDate}</li>
                                 <br>
                                 <li><strong>Date of booking: {request.BookedDate:dd MMMM, yyyy, HH mm}</li>
                             </ul>
