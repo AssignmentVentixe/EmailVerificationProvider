@@ -56,7 +56,7 @@ public class BookingEmailService(IConfiguration configuration, EmailClient email
                                 <li><strong>Event Location: </strong>{request.EventLocation}</li>
                                 <li><strong>Event Date: </strong>{request.EventDate}</li>
                                 <br>
-                                <li><strong>Date of booking: </strong>{request.BookedDate.AddHours(2):dd MMMM, yyyy, HH:mm}</li>
+                                <li><strong>Date of booking: </strong>{request.BookedDate.AddHours(2):yyyy, MMMM dd, HH:mm}</li>
                             </ul>
                             <p>We look forward to seeing you there.</p>
                             <p>Best regards,<br>Ventixe</p>
