@@ -1,8 +1,11 @@
 using WebApi.Services;
 using Azure.Communication.Email;
 using WebApi.Interfaces;
+using Azure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Configuration.AddAzureKeyVault(new Uri(builder.Configuration["KeyVault:Uri"]!), new DefaultAzureCredential());
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
